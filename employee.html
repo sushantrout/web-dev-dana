@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Managemnet System</title>
+    <script>
+
+        var employees = [];
+        function addEmployee() {
+            var id = document.getElementById('id').value;
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+
+            let empl = {
+                "id": id,
+                "name": name,
+                "email": email
+            }
+            resetForm();
+            printTable(empl);
+
+            employees.push(empl);
+
+            localStorage.setItem('employees', JSON.stringify(employees));
+        }
+
+
+        function resetForm() {
+            document.getElementById('id').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+        }
+
+
+        function deleteRow(id) {
+            console.log(id);
+        }
+
+        function editRow(id) {
+            let selectedEmployees = employees.filter(e => e.id == id);
+            if(selectedEmployees.length > 0) {
+                let currentEmp = selectedEmployees[0];
+
+                document.getElementById('id').value = currentEmp.id;
+                document.getElementById('name').value = currentEmp.name;
+                document.getElementById('email').value = currentEmp.email;
+            }
+        }
+
+        function printTable(emp) {
+            var table = document.getElementById('emloyeeTable');
+            const row = table.insertRow();
+            row.insertCell(0).innerText = emp.id;
+            row.insertCell(1).innerText = emp.name;
+            row.insertCell(2).innerText = emp.email;
+            row.insertCell(3).innerHTML = '<button onclick="deleteRow('+emp.id+')">Delete</button>';
+            row.insertCell(4).innerHTML = '<button onclick="editRow('+emp.id+')">Edit</button>';
+
+            
+        }
+
+
+        window.onload = function () {
+            var emps = localStorage.getItem('employees');
+            if (emps) {
+                employees = JSON.parse(emps);
+                employees.forEach(emp => {
+                    printTable(emp);
+                });
+            }
+           
+        }
+    </script>
+</head>
+
+<body>
+    <center style="background-color: aqua;">
+        <h1>Employee Managemnet System</h1>
+    </center>
+
+    <form>
+        <table>
+            <tr>
+                <td>ID</td>
+                <td><input type="text" id="id" name="id" required></td>
+            </tr>
+            <tr>
+                <td>NAME</td>
+                <td><input type="text" id="name" name="name" required></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" id="email" name="email" required></td>
+            </tr>
+        </table>
+        
+
+        <button type="button" onclick="addEmployee()">Submit</button>
+    </form>
+
+    <table id="emloyeeTable">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+
+    </table>
+</body>
+
+</html>
